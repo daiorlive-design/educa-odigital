@@ -1,468 +1,349 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Área de Educação Digital</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --blue: #1a5fa8;
-      --blue-light: #e8f1fb;
-      --blue-mid: #378ADD;
-      --teal: #0f6e56;
-      --teal-light: #e1f5ee;
-      --purple: #534AB7;
-      --purple-light: #eeedfe;
-      --coral: #993C1D;
-      --coral-light: #faece7;
-      --amber: #854F0B;
-      --amber-light: #faeeda;
-      --hub: #0C447C;
-      --bg: #f4f6f9;
-      --card-bg: #ffffff;
-      --text: #1a1a2e;
-      --text-muted: #5a6478;
-      --text-light: #8a93a6;
-      --border: rgba(0,0,0,0.08);
-    }
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  .ed-root { font-family: var(--font-sans); padding: 28px 20px 40px; }
+  .ed-header { text-align: center; margin-bottom: 24px; }
+  .ed-titulo { font-size: 22px; font-weight: 500; color: var(--color-text-primary); letter-spacing: -0.3px; }
+  .ed-sub { font-size: 13px; color: var(--color-text-secondary); margin-top: 4px; }
 
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 40px 24px 60px;
-    }
+  .ed-legend { display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; flex-wrap: wrap; }
+  .ed-leg { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--color-text-secondary); }
+  .ed-leg-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 
-    /* HEADER */
-    .header {
-      text-align: center;
-      margin-bottom: 36px;
-    }
-    .header-eyebrow {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--blue-mid);
-      margin-bottom: 8px;
-    }
-    .header-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: 36px;
-      font-weight: 400;
-      color: var(--hub);
-      line-height: 1.1;
-      margin-bottom: 10px;
-    }
-    .header-sub {
-      font-size: 14px;
-      color: var(--text-muted);
-    }
+  .ed-stage {
+    display: grid;
+    grid-template-columns: 1fr 120px 1fr;
+    align-items: center;
+    gap: 0;
+  }
+  .ed-col { display: flex; flex-direction: column; gap: 10px; }
+  .ed-col.left { align-items: flex-end; padding-right: 16px; }
+  .ed-col.right { align-items: flex-start; padding-left: 16px; }
 
-    /* LEGEND */
-    .legend {
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 40px;
-    }
-    .leg {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .leg-dot {
-      width: 9px; height: 9px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+  .ed-center {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; z-index: 2;
+  }
+  .ed-hub {
+    width: 106px; height: 106px;
+    background: #0C447C;
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; z-index: 3;
+  }
+  .ed-hub-t1 { font-size: 12px; font-weight: 500; color: #fff; }
+  .ed-hub-t2 { font-size: 12px; font-weight: 500; color: #85B7EB; }
+  .ed-ring {
+    position: absolute; border-radius: 50%;
+    border: 1px solid #378ADD; opacity: 0.15;
+  }
+  .ed-ring-1 { width: 142px; height: 142px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .ed-ring-2 { width: 186px; height: 186px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
+  .ed-ring-3 { width: 234px; height: 234px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
 
-    /* MAIN LAYOUT */
-    .stage {
-      display: grid;
-      grid-template-columns: 1fr 180px 1fr;
-      align-items: center;
-      max-width: 1100px;
-      margin: 0 auto;
-      gap: 0;
-    }
+  .ed-card {
+    background: var(--color-background-secondary);
+    border: 1px solid var(--color-border-tertiary);
+    border-radius: 10px;
+    width: 190px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .ed-card:hover { border-color: var(--card-color); transform: translateY(-2px); }
+  .ed-card.open { border-color: var(--card-color); }
 
-    .col {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .col.left { align-items: flex-end; padding-right: 24px; }
-    .col.right { align-items: flex-start; padding-left: 24px; }
+  .ed-card-accent {
+    width: 3px; position: absolute;
+    left: 0; top: 0; bottom: 0; border-radius: 10px 0 0 10px;
+    background: var(--card-color); opacity: 0.8;
+  }
+  .ed-card-head { padding: 9px 10px 9px 14px; display: flex; align-items: center; justify-content: space-between; gap: 6px; }
+  .ed-card-title { font-size: 11px; font-weight: 500; color: var(--color-text-primary); line-height: 1.4; flex: 1; }
+  .ed-card-tag {
+    display: inline-block; font-size: 10px;
+    color: var(--card-color); border: 1px solid var(--card-color);
+    border-radius: 4px; padding: 1px 5px; opacity: 0.8; flex-shrink: 0;
+  }
+  .ed-chevron {
+    width: 13px; height: 13px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.25s; color: var(--color-text-tertiary);
+  }
+  .ed-card.open .ed-chevron { transform: rotate(180deg); }
 
-    /* HUB */
-    .center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .hub {
-      width: 150px; height: 150px;
-      background: var(--hub);
-      border-radius: 50%;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      position: relative; z-index: 3;
-      box-shadow: 0 8px 32px rgba(12,68,124,0.25);
-    }
-    .hub-t1 { font-family: 'DM Serif Display', serif; font-size: 17px; color: #fff; line-height: 1.2; }
-    .hub-t2 { font-size: 13px; font-weight: 500; color: #85B7EB; margin-top: 2px; }
+  .ed-body {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 10px 0 14px;
+  }
+  .ed-card.open .ed-body { max-height: 280px; padding: 0 10px 10px 14px; }
+  .ed-body-desc { font-size: 11px; color: var(--color-text-secondary); line-height: 1.55; margin-bottom: 7px; }
+  .ed-body-items { display: flex; flex-direction: column; gap: 4px; }
+  .ed-body-item {
+    font-size: 11px; color: var(--color-text-secondary);
+    display: flex; align-items: flex-start; gap: 5px;
+  }
+  .ed-body-item::before {
+    content: ''; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--card-color); flex-shrink: 0; margin-top: 5px;
+  }
+  .ed-body-link {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px; color: var(--card-color);
+    text-decoration: none; margin-top: 8px;
+    opacity: 0.85; transition: opacity 0.15s;
+  }
+  .ed-body-link:hover { opacity: 1; text-decoration: underline; }
+  .ed-body-link svg { flex-shrink: 0; }
+</style>
 
-    .ring {
-      position: absolute;
-      border-radius: 50%;
-      border: 1.5px solid var(--blue-mid);
-      opacity: 0.12;
-    }
-    .ring-1 { width: 200px; height: 200px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .ring-2 { width: 260px; height: 260px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .ring-3 { width: 330px; height: 330px; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-
-    /* CARDS */
-    .card {
-      background: var(--card-bg);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      width: 220px;
-      cursor: pointer;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-    .card:hover {
-      border-color: var(--card-color);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
-    }
-    .card.open {
-      border-color: var(--card-color);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-    }
-    .card-accent {
-      width: 4px;
-      position: absolute; left: 0; top: 0; bottom: 0;
-      border-radius: 12px 0 0 12px;
-      background: var(--card-color);
-    }
-    .card-head {
-      padding: 12px 12px 12px 18px;
-      display: flex; align-items: center;
-      justify-content: space-between; gap: 8px;
-    }
-    .card-title {
-      font-size: 13px; font-weight: 500;
-      color: var(--text); line-height: 1.4; flex: 1;
-    }
-    .card-tag {
-      font-size: 10px; font-weight: 500;
-      color: var(--card-color);
-      border: 1.5px solid var(--card-color);
-      border-radius: 20px;
-      padding: 2px 8px;
-      flex-shrink: 0;
-      opacity: 0.85;
-      letter-spacing: 0.3px;
-    }
-    .chevron {
-      width: 16px; height: 16px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.25s; color: var(--text-light);
-    }
-    .card.open .chevron { transform: rotate(180deg); }
-
-    .card-body {
-      max-height: 0; overflow: hidden;
-      transition: max-height 0.35s ease, padding 0.35s ease;
-      padding: 0 14px 0 18px;
-    }
-    .card.open .card-body { max-height: 300px; padding: 0 14px 14px 18px; }
-
-    .card-desc {
-      font-size: 12px; color: var(--text-muted);
-      line-height: 1.6; margin-bottom: 10px;
-      padding-top: 2px;
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
-    }
-    .card-items { display: flex; flex-direction: column; gap: 6px; }
-    .card-item {
-      font-size: 12px; color: var(--text-muted);
-      display: flex; align-items: flex-start; gap: 8px;
-    }
-    .card-item::before {
-      content: '';
-      width: 5px; height: 5px; border-radius: 50%;
-      background: var(--card-color);
-      flex-shrink: 0; margin-top: 5px;
-    }
-
-    /* FOOTER */
-    .footer {
-      text-align: center;
-      margin-top: 48px;
-      font-size: 12px;
-      color: var(--text-light);
-    }
-
-    @media (max-width: 860px) {
-      .stage { grid-template-columns: 1fr; gap: 24px; }
-      .col.left, .col.right { align-items: center; padding: 0; }
-      .center { margin: 24px 0; }
-      .card { width: 100%; max-width: 340px; }
-      .ring-2, .ring-3 { display: none; }
-    }
-  </style>
-</head>
-<body>
-
-  <div class="header">
-    <div class="header-eyebrow">Colégio</div>
-    <div class="header-title">Área de Educação Digital</div>
-    <div class="header-sub">Clique nos cards para expandir cada frente de atuação</div>
+<div class="ed-root">
+  <div class="ed-header">
+    <div class="ed-titulo">Área de Educação Digital</div>
+    <div class="ed-sub">Clique nos cards para expandir cada frente</div>
   </div>
 
-  <div class="legend">
-    <div class="leg"><div class="leg-dot" style="background:#1a5fa8"></div>Formação</div>
-    <div class="leg"><div class="leg-dot" style="background:#0f6e56"></div>Experiências</div>
-    <div class="leg"><div class="leg-dot" style="background:#534AB7"></div>Gestão</div>
-    <div class="leg"><div class="leg-dot" style="background:#993C1D"></div>Cidadania</div>
-    <div class="leg"><div class="leg-dot" style="background:#854F0B"></div>Eventos</div>
+  <div class="ed-legend">
+    <div class="ed-leg"><div class="ed-leg-dot" style="background:#378ADD"></div>Formação</div>
+    <div class="ed-leg"><div class="ed-leg-dot" style="background:#1D9E75"></div>Experiências</div>
+    <div class="ed-leg"><div class="ed-leg-dot" style="background:#7F77DD"></div>Gestão</div>
+    <div class="ed-leg"><div class="ed-leg-dot" style="background:#D85A30"></div>Cidadania</div>
+    <div class="ed-leg"><div class="ed-leg-dot" style="background:#BA7517"></div>Eventos</div>
   </div>
 
-  <div class="stage">
+  <div class="ed-stage">
 
-    <!-- COLUNA ESQUERDA -->
-    <div class="col left">
+    <div class="ed-col left">
 
-      <div class="card" style="--card-color:#1a5fa8" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Formação de professores</div>
-          <div class="card-tag">formação</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#378ADD" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Formação de professores</div>
+          <div class="ed-card-tag">formação</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Capacitação contínua dos docentes para integração de tecnologia na prática pedagógica.</div>
-          <div class="card-items">
-            <div class="card-item">Workshops e oficinas práticas</div>
-            <div class="card-item">Acompanhamento em sala</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Capacitação contínua dos docentes para integração de tecnologia na prática pedagógica.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Workshops e oficinas práticas</div>
+            <div class="ed-body-item">Acompanhamento em sala</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#0f6e56" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Ludoteca</div>
-          <div class="card-tag">experiências</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#1D9E75" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Ludoteca</div>
+          <div class="ed-card-tag">experiências</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Espaço lúdico nos intervalos estimulando a criatividade, colaboração e bem-estar.</div>
-          <div class="card-items">
-            <div class="card-item">Jogos educativos analógicos e digitais</div>
-            <div class="card-item">Just Dance</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Espaço lúdico nos intervalos estimulando a criatividade, colaboração e bem-estar.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Jogos educativos analógicos e digitais</div>
+            <div class="ed-body-item">Just Dance</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#534AB7" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Gestão estratégica de recursos</div>
-          <div class="card-tag">gestão</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#7F77DD" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Gestão estratégica de recursos</div>
+          <div class="ed-card-tag">gestão</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Organização e manutenção preventiva de dispositivos e espaços.</div>
-          <div class="card-items">
-            <div class="card-item">Inventário dos equipamentos</div>
-            <div class="card-item">Suporte técnico pedagógico</div>
-            <div class="card-item">Labmóvel</div>
-            <div class="card-item">Materiais de robótica e maker</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Organização e manutenção preventiva de dispositivos e espaços.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Inventário dos equipamentos</div>
+            <div class="ed-body-item">Suporte técnico pedagógico</div>
+            <div class="ed-body-item">Labmóvel</div>
+            <div class="ed-body-item">Materiais de robótica e maker</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#993C1D" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Cidadania Digital</div>
-          <div class="card-tag">cidadania</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#D85A30" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Cidadania Digital</div>
+          <div class="ed-card-tag">cidadania</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Ações que promovem a conscientização no ambiente digital.</div>
-          <div class="card-items">
-            <div class="card-item">Educação Digital + SOE</div>
-            <div class="card-item">Palestras sobre Cyberbullying</div>
-            <div class="card-item">Aulas magnas</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Ações que promovem a conscientização no ambiente digital.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Educação Digital + SOE</div>
+            <div class="ed-body-item">Palestras sobre Cyberbullying</div>
+            <div class="ed-body-item">Aulas magnas</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#1a5fa8" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Suporte Pedagógico</div>
-          <div class="card-tag">formação</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#378ADD" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Suporte Pedagógico</div>
+          <div class="ed-card-tag">formação</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Atendimento à comunidade escolar e apoio técnico a projetos.</div>
-          <div class="card-items">
-            <div class="card-item">Tutor-maker</div>
-            <div class="card-item">Assistentes</div>
-            <div class="card-item">Estagiários</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Atendimento à comunidade escolar e apoio técnico a projetos.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Tutor-maker</div>
+            <div class="ed-body-item">Assistentes</div>
+            <div class="ed-body-item">Estagiários</div>
           </div>
         </div>
       </div>
 
     </div>
 
-    <!-- CENTRO -->
-    <div class="center">
-      <div class="ring ring-3"></div>
-      <div class="ring ring-2"></div>
-      <div class="ring ring-1"></div>
-      <div class="hub">
-        <span class="hub-t1">Educação</span>
-        <span class="hub-t2">Digital</span>
+    <div class="ed-center">
+      <div class="ed-ring ed-ring-3"></div>
+      <div class="ed-ring ed-ring-2"></div>
+      <div class="ed-ring ed-ring-1"></div>
+      <div class="ed-hub">
+        <span class="ed-hub-t1">Educação</span>
+        <span class="ed-hub-t2">Digital</span>
       </div>
     </div>
 
-    <!-- COLUNA DIREITA -->
-    <div class="col right">
+    <div class="ed-col right">
 
-      <div class="card" style="--card-color:#534AB7" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Ecossistema Microsoft e Apple</div>
-          <div class="card-tag">gestão</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#7F77DD" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Ecossistema Microsoft e Apple</div>
+          <div class="ed-card-tag">gestão</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Gestão pedagógica de ambientes:</div>
-          <div class="card-items">
-            <div class="card-item">Microsoft 365</div>
-            <div class="card-item">Apple na escola</div>
-            <div class="card-item">Curadoria de apps educacionais</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Gestão pedagógica de ambientes:</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Microsoft 365</div>
+            <div class="ed-body-item">Apple na escola</div>
+            <div class="ed-body-item">Curadoria de apps educacionais</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#854F0B" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Torneios de robótica</div>
-          <div class="card-tag">eventos</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#BA7517" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Torneios de robótica</div>
+          <div class="ed-card-tag">eventos</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Competições de robótica que estimulam pensamento computacional e trabalho em equipe.</div>
-          <div class="card-items">
-            <div class="card-item">Fases internas e externas</div>
-            <div class="card-item">Mentoria técnica</div>
-            <div class="card-item">Exposição de projetos</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Competições de robótica que estimulam pensamento computacional e trabalho em equipe.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Fases internas e externas</div>
+            <div class="ed-body-item">Mentoria técnica</div>
+            <div class="ed-body-item">Exposição de projetos</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#854F0B" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Scratch Day</div>
-          <div class="card-tag">eventos</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#BA7517" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Scratch Day</div>
+          <div class="ed-card-tag">eventos</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Planejamento estratégico e operacional do Scratch Day.</div>
-          <div class="card-items">
-            <div class="card-item">Curadoria de desafios</div>
-            <div class="card-item">Mediação de atividades de programação</div>
-            <div class="card-item">Promoção do Pensamento Computacional</div>
-            <div class="card-item">Integração com a Cultura Maker</div>
-            <div class="card-item">Fomento à Aprendizagem Criativa</div>
-            <div class="card-item">Exposição de protótipos</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Planejamento estratégico e operacional do Scratch Day.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Curadoria de desafios</div>
+            <div class="ed-body-item">Mediação de atividades de programação</div>
+            <div class="ed-body-item">Promoção do Pensamento Computacional</div>
+            <div class="ed-body-item">Integração com a Cultura Maker</div>
+            <div class="ed-body-item">Fomento à Aprendizagem Criativa</div>
+            <div class="ed-body-item">Exposição de protótipos</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#0f6e56" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Cursos extras</div>
-          <div class="card-tag">experiências</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#1D9E75" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Cursos extras</div>
+          <div class="ed-card-tag">experiências</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Oferta e gestão de cursos extras voltados a tecnologia e inovação para alunos do Infantil 5 ao Ensino Médio.</div>
-          <div class="card-items">
-            <div class="card-item">Total de 293 alunos</div>
-            <div class="card-item">Professores da área de Educação Digital</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Oferta e gestão de cursos extras voltados a tecnologia e inovação para alunos do Infantil 5 ao Ensino Médio.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">Total de 293 alunos</div>
+            <div class="ed-body-item">Professores da área de Educação Digital</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#854F0B" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Olimpíadas</div>
-          <div class="card-tag">eventos</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#BA7517" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Olimpíadas</div>
+          <div class="ed-card-tag">eventos</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-desc">Organização e aplicação das Olimpíadas.</div>
-          <div class="card-items">
-            <div class="card-item">OBR – Olimpíada Brasileira de Robótica</div>
-            <div class="card-item">OBI – Olimpíada Brasileira de Informática</div>
+        <div class="ed-body">
+          <div class="ed-body-desc">Organização e aplicação das Olimpíadas.</div>
+          <div class="ed-body-items">
+            <div class="ed-body-item">OBR – Olimpíada Brasileira de Robótica</div>
+            <div class="ed-body-item">OBI – Olimpíada Brasileira de Informática</div>
           </div>
         </div>
       </div>
 
-      <div class="card" style="--card-color:#0f6e56" onclick="toggle(this)">
-        <div class="card-accent"></div>
-        <div class="card-head">
-          <div class="card-title">Ações nos intervalos</div>
-          <div class="card-tag">experiências</div>
-          <div class="chevron"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="ed-card" style="--card-color:#1D9E75" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">Ações nos intervalos</div>
+          <div class="ed-card-tag">experiências</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         </div>
-        <div class="card-body">
-          <div class="card-items">
-            <div class="card-item">Festival de Just Dance</div>
-            <div class="card-item">Exposição Arduino Day</div>
-            <div class="card-item">Semana da Internet Segura</div>
+        <div class="ed-body">
+          <div class="ed-body-items">
+            <div class="ed-body-item">Festival de Just Dance</div>
+            <div class="ed-body-item">Exposição Arduino Day</div>
+            <div class="ed-body-item">Semana da Internet Segura</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ed-card" style="--card-color:#BA7517" onclick="toggle(this)">
+        <div class="ed-card-accent"></div>
+        <div class="ed-card-head">
+          <div class="ed-card-title">TEDx PortoSeguroSchool</div>
+          <div class="ed-card-tag">eventos</div>
+          <div class="ed-chevron"><svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <div class="ed-body">
+          <div class="ed-body-items">
+            <a class="ed-body-link" href="https://tedx.portoseguro.org.br" target="_blank" onclick="event.stopPropagation()">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H5M10 2V7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              tedx.portoseguro.org.br
+            </a>
           </div>
         </div>
       </div>
 
     </div>
   </div>
+</div>
 
-  <div class="footer">Área de Educação Digital — todos os direitos reservados</div>
-
-  <script>
-    function toggle(card) {
-      const isOpen = card.classList.contains('open');
-      document.querySelectorAll('.card.open').forEach(c => c.classList.remove('open'));
-      if (!isOpen) card.classList.add('open');
-    }
-  </script>
-
-</body>
-</html>
+<script>
+function toggle(card) {
+  const isOpen = card.classList.contains('open');
+  document.querySelectorAll('.ed-card.open').forEach(c => c.classList.remove('open'));
+  if (!isOpen) card.classList.add('open');
+}
+</script>
